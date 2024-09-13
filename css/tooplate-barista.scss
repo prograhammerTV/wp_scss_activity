@@ -1,0 +1,1382 @@
+// Define color variables
+$white-color:                 #ffffff;
+$primary-color:               #BC6C25;
+$secondary-color:             #DDA15E;
+$section-bg-color:            #b78752;
+$custom-btn-bg-color:         #BC6C25;
+$custom-btn-bg-hover-color:   #DDA15E;
+$dark-color:                  #000000;
+$p-color:                     #717275;
+$border-color:                #7fffd4;
+$link-hover-color:            #E76F51;
+
+// Define font and sizing variables
+$body-font-family:            'Plus Jakarta Sans', sans-serif;
+
+$h1-font-size:                68px;
+$h2-font-size:                46px;
+$h3-font-size:                32px;
+$h4-font-size:                28px;
+$h5-font-size:                24px;
+$h6-font-size:                22px;
+$p-font-size:                 20px;
+$btn-font-size:               16px;
+$form-btn-font-size:          18px;
+$menu-font-size:              16px;
+
+// Define border radius and font weights
+$border-radius-large:         100px;
+$border-radius-medium:        20px;
+$border-radius-small:         10px;
+
+$font-weight-thin:            200;
+$font-weight-light:           300;
+$font-weight-normal:          400;
+$font-weight-bold:            700;
+
+// Mixin for easy font styling
+// We use a mixin so we don't repeat the font-size and font-weight properties
+@mixin font-style($size, $weight) {
+  font-size: $size;
+  font-weight: $weight;
+}
+
+// Extend common properties for headings
+// This allows us to reuse the same styling for all headings
+%heading-style {
+  color: $dark-color;
+  font-weight: $font-weight-bold;
+}
+
+// Body styles
+body {
+  background-color: $white-color;
+  font-family: $body-font-family; // Sets the font for the whole document
+}
+
+// Heading styles using nesting and @extend
+h1, h2, h3, h4, h5, h6 {
+  @extend %heading-style; // Reuse heading styles for all headings
+  
+  h1 { @include font-style($h1-font-size, $font-weight-bold); }
+  h2 { @include font-style($h2-font-size, $font-weight-bold); }
+  h3 { @include font-style($h3-font-size, $font-weight-bold); }
+  h4 { @include font-style($h4-font-size, $font-weight-bold); }
+  h5 { @include font-style($h5-font-size, $font-weight-bold); }
+  h6 { @include font-style($h6-font-size, $font-weight-bold); }
+}
+
+// Paragraph and list styles
+p, ul li {
+  color: $p-color;
+  @include font-style($p-font-size, $font-weight-light); // Font style mixin for both p and list items
+}
+
+// Anchor and button styles
+a, button {
+  touch-action: manipulation; // Improves button touch experience
+  transition: all 0.3s; // Smooth transition on hover
+}
+
+a {
+  display: inline-block; 
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color; // Changes color on hover
+  }
+}
+
+// Bold text styles
+b, strong {
+  font-weight: $font-weight-bold; // Make text bold for b and strong tags
+}
+
+
+
+// Define additional color and size variables
+$section-bg-color:            #b78752; // Background color for sections
+$dark-color:                  #000000; // Dark color for overlays
+
+// Mixin for section padding
+// This mixin adds consistent padding to the top and bottom of sections
+@mixin section-padding($top, $bottom) {
+  padding-top: $top;
+  padding-bottom: $bottom;
+}
+
+// Section padding styles
+.section-padding {
+  @include section-padding(100px, 100px); // Apply 100px padding on top and bottom
+}
+
+// Section background styles
+.section-bg {
+  background-color: $section-bg-color; // Apply background color for the section
+}
+
+// Section overlay styles
+.section-overlay {
+  background-color: $dark-color; // Dark overlay color
+  position: absolute;
+  z-index: 9; // Ensures overlay is behind other content
+  top: 0;
+  left: 0;
+  pointer-events: none; // Makes sure overlay doesn't block interactions
+  width: 100%;
+  height: 100%;
+  opacity: 0.65; // Slightly transparent overlay
+}
+
+// Position container above the overlay
+.section-overlay + .container {
+  position: relative; // Brings the container above the overlay
+  z-index: 22; // Higher z-index than the overlay
+}
+
+// Back-to-top icon styles
+.back-top-icon {
+  font-size: $h2-font-size; // Use h2 font size for the icon
+}
+
+
+
+
+// Define color and size variables
+$white-color:                 #ffffff; // White color used for backgrounds and borders
+$border-color:                #7fffd4; // Border color for timeline circles
+
+// Mixin for timeline container style
+// This mixin helps to apply consistent styles for timeline container with padding
+@mixin timeline-container-style($left-position) {
+  position: relative;
+  width: 50%;
+  padding: 10px 40px;
+  padding-top: 0;
+  background-color: inherit;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -12px;
+    background-color: $white-color; // Circle color
+    border: 5px solid $border-color; // Border color of the circle
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  &::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 9px;
+    width: 0;
+    z-index: 1;
+    border: medium solid $white-color;
+    border-width: 20px 20px 20px 0; // Triangle pointing to the left or right
+    border-color: transparent $white-color transparent transparent;
+  }
+
+  &.timeline-container-left::before {
+    right: 25px; // Positioning for left side container
+  }
+
+  &.timeline-container-right::before {
+    left: 25px; // Positioning for right side container
+  }
+
+  &.timeline-container-right::after {
+    left: -13px; // Adjust position for right side container circle
+  }
+}
+
+// Main timeline styles
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto; // Center the timeline container
+  // The line in the middle of the timeline
+  &::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    background-color: $white-color;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px; // Center the line in the middle of the timeline
+  }
+}
+
+// Timeline container styles for left and right positions
+.timeline-container {
+  @include timeline-container-style(left); // Apply common styles
+}
+
+// Timeline container on the left
+.timeline-container-left {
+  left: 0; // Align container to the left
+}
+
+// Timeline container on the right
+.timeline-container-right {
+  left: 50%; // Align container to the right
+}
+
+// Content inside the timeline container
+.timeline-content {
+  padding: 5px;
+  background-color: $white-color; // White background for content
+  position: relative;
+  border-radius: var(--border-radius-medium); // Rounded corners for the content
+}
+
+// Responsive styles for screens smaller than 991px
+@media screen and (max-width: 991px) {
+  .timeline::after {
+    left: 31px; // Adjust the line position for smaller screens
+  }
+
+  .timeline-container {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+    @include timeline-container-style(left); // Apply common styles for responsive design
+  }
+
+  .timeline-container::before {
+    left: 58px; // Adjust triangle position for smaller screens
+    border-width: 20px 20px 20px 0;
+    border-color: transparent $white-color transparent transparent;
+  }
+
+  .timeline-container-left::after,
+  .timeline-container-right::after {
+    left: 6px; // Adjust circle position for smaller screens
+  }
+
+  .timeline-container-right {
+    left: 0%; // Align right container to the full width
+  }
+}
+
+
+
+
+// Define additional color and size variables
+$custom-btn-bg-color:         #BC6C25; // Background color for custom buttons
+$custom-btn-bg-hover-color:   #DDA15E; // Background color when hovering over custom buttons
+$border-radius-large:         100px; // Large border radius for custom buttons
+$white-color:                 #ffffff; // White color for text and borders
+$btn-font-size:               16px; // Font size for buttons
+$font-weight-bold:            700; // Bold font weight for buttons
+$secondary-color:             #DDA15E; // Secondary color for text in border buttons
+
+// Mixin for button styles
+// This mixin helps standardize button styles with padding, border-radius, etc.
+@mixin custom-button-styles($bg-color, $border-color, $text-color) {
+  background: $bg-color;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-large;
+  color: $text-color;
+  font-size: $btn-font-size;
+  font-weight: $font-weight-bold;
+  line-height: normal;
+  transition: all 0.3s; // Smooth transition for hover effects
+  padding: 12px 28px; // Padding inside the button
+}
+
+// Base button styles
+.custom-btn {
+  @include custom-button-styles($custom-btn-bg-color, transparent, $white-color); // Apply base styles
+
+  &:hover {
+    background: $custom-btn-bg-hover-color; // Change background on hover
+    color: $white-color; // Keep text color white on hover
+  }
+}
+
+// Border button styles
+.custom-border-btn {
+  @include custom-button-styles(transparent, $white-color, $white-color); // Apply border button styles
+
+  &:hover {
+    background: $white-color; // Change background to white on hover
+    color: $secondary-color; // Change text color on hover
+  }
+}
+
+// White background button with border
+.custom-btn-bg-white {
+  border-color: $white-color; // Border color is white
+  color: $white-color; // Text color is white
+}
+
+// Italic button style
+.custom-btn-italic {
+  font-style: italic; // Makes the text italic
+}
+
+
+
+
+// Define color and size variables
+$white-color:                 #ffffff; // White color for text and icons
+$dark-color:                  #000000; // Dark color for overlays
+$secondary-color:             #DDA15E; // Secondary color for hover effects
+$border-radius-medium:        20px; // Medium border radius for rounded corners
+$menu-font-size:              16px; // Font size for menu items
+
+// Mixin for sticky wrapper styling
+// This mixin is used for the sticky header to ensure it stays on top
+@mixin sticky-wrapper {
+  position: absolute;
+  z-index: 999999; // High z-index to stay above other elements
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+// Sticky wrapper styles
+.sticky-wrapper {
+  @include sticky-wrapper;
+  
+  &.is-sticky {
+    .container {
+      background: rgba(0, 0, 0, 0.65); // Dark semi-transparent background
+      border-radius: $border-radius-medium; // Rounded corners
+      padding: 15px 30px; // Padding inside the container
+    }
+  }
+}
+
+// Navbar styles
+.navbar {
+  background: transparent; // Transparent background for the navbar
+  z-index: 999999; // Ensures navbar stays above other content
+  padding-top: 30px;
+  padding-bottom: 30px; // Padding around the navbar
+}
+
+// Container inside the navbar
+.navbar .container {
+  background: rgba(0, 0, 0, 0.35); // Semi-transparent dark background
+  border-radius: $border-radius-medium; // Rounded corners
+  padding: 15px 30px; // Padding inside the container
+}
+
+// Navbar brand styles
+.navbar-brand,
+.navbar-brand:hover {
+  font-size: var(--h4-font-size); // Font size for the brand
+  font-weight: var(--font-weight-bold); // Bold font weight
+  display: block; // Ensures brand occupies its own line
+  color: $white-color; // White color for text
+}
+
+// Navbar brand image styles
+.navbar .navbar-brand-image {
+  filter: brightness(0) invert(1); // Inverts color of the image to match the white theme
+}
+
+.navbar-brand-image {
+  width: 48px; // Set width for brand image
+  height: auto; // Auto height to maintain aspect ratio
+  margin-right: 10px; // Space between image and text
+}
+
+// Custom button inside navbar
+.navbar .custom-btn {
+  padding: 10px 20px; // Padding inside the button
+}
+
+// Navbar links styling
+.navbar-expand-lg .navbar-nav .nav-link {
+  border-radius: var(--border-radius-large); // Large rounded corners for links
+  margin: 10px; // Space around the links
+  padding: 10px; // Padding inside the links
+}
+
+.navbar-nav .nav-link {
+  display: inline-block; // Ensures links are displayed as blocks for padding
+  color: $white-color; // White color for text
+  font-size: $menu-font-size; // Font size for menu items
+  font-weight: var(--font-weight-bold); // Bold font weight
+  padding-top: 15px;
+  padding-bottom: 15px; // Padding inside the link
+}
+
+// Active and hover states for navbar links
+.navbar-nav .nav-link.active, 
+.navbar-nav .nav-link:hover {
+  color: $secondary-color; // Changes color on hover and active states
+}
+
+// Dropdown menu styles
+.navbar .dropdown-menu {
+  background: $white-color; // White background for dropdown
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175); // Shadow for dropdown
+  border: 0; // No border
+  display: inherit; // Ensure dropdown behaves as expected
+  opacity: 0; // Hidden by default
+  min-width: 9rem; // Minimum width for dropdown
+  margin-top: 20px; // Space above the dropdown
+  padding: 13px 0 10px 0; // Padding inside the dropdown
+  transition: all 0.3s; // Smooth transition for visibility
+  pointer-events: none; // Ignore pointer events when hidden
+}
+
+// Dropdown arrow
+.navbar .dropdown-menu::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 15px solid $white-color; // Arrow pointing to the dropdown
+  position: absolute;
+  top: -10px;
+  left: 10px; // Position of the arrow
+}
+
+// Dropdown item styles
+.navbar .dropdown-item {
+  display: inline-block; // Display items inline
+  color: var(--p-color); // Color for dropdown items
+  font-size: $menu-font-size; // Font size for items
+  font-weight: var(--font-weight-medium); // Medium font weight
+  position: relative; // Allows positioning of pseudo-elements
+}
+
+// Dropdown item states
+.navbar .dropdown-item.active, 
+.navbar .dropdown-item:active,
+.navbar .dropdown-item:focus, 
+.navbar .dropdown-item:hover {
+  background: transparent; // Transparent background on hover
+  color: $link-hover-color; // Color changes on hover and active states
+}
+
+// Dropdown toggle icon
+.navbar .dropdown-toggle::after {
+  content: "\f282"; // Unicode for the dropdown icon
+  display: inline-block;
+  font-family: bootstrap-icons !important; // Font family for icons
+  font-size: $menu-font-size; // Font size for icon
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  left: 2px; // Position of the icon
+  border: 0; // No border
+}
+
+// Media query for dropdown hover
+@media screen and (min-width: 992px) {
+  .navbar .dropdown:hover .dropdown-menu {
+    opacity: 1; // Show dropdown menu on hover
+    margin-top: 0; // Remove margin when visible
+    pointer-events: auto; // Allow pointer events when visible
+  }
+}
+
+// Navbar toggler (for mobile view) styles
+.navbar-toggler {
+  border: 0; // No border for the toggler
+  padding: 0; // No extra padding
+  cursor: pointer; // Pointer cursor on hover
+  margin: 0; // No extra margin
+  width: 30px; // Width of the toggler
+  height: 35px; // Height of the toggler
+  outline: none; // Remove default outline
+}
+
+.navbar-toggler:focus {
+  outline: none; // Remove outline on focus
+  box-shadow: none; // No box-shadow on focus
+}
+
+// Navbar toggler icon styles
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+  background: transparent; // Transparent background when expanded
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon:before,
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon:after {
+  transition: top 300ms 50ms ease, transform 300ms 350ms ease; // Smooth transition for rotation
+  top: 0; // Align to top when expanded
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon:before {
+  transform: rotate(45deg); // Rotate before pseudo-element
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon:after {
+  transform: rotate(-45deg); // Rotate after pseudo-element
+}
+
+// Toggler icon styles
+.navbar-toggler .navbar-toggler-icon {
+  background: $white-color; // White color for the icon
+  transition: background 10ms 300ms ease; // Smooth background transition
+  display: block; // Block display for icon
+  width: 30px; // Width of the icon
+  height: 2px; // Height of the icon
+  position: relative; // Positioning for pseudo-elements
+}
+
+.navbar-toggler .navbar-toggler-icon:before,
+.navbar-toggler .navbar-toggler-icon:after {
+  transition: top 300ms 350ms ease, transform 300ms 50ms ease; // Smooth transition for pseudo-elements
+  position: absolute; // Positioning for pseudo-elements
+  right: 0;
+  left: 0;
+  background: $white-color; // White color for pseudo-elements
+  width: 30px; // Width of pseudo-elements
+  height: 2px; // Height of pseudo-elements
+  content: ''; // Empty content for pseudo-elements
+}
+
+.navbar-toggler .navbar-toggler-icon::before {
+  top: -8px; // Position before pseudo-element
+}
+
+.navbar-toggler .navbar-toggler-icon::after {
+  top: 8px; // Position after pseudo-element
+}
+
+
+
+
+// Define additional color and size variables
+$dark-color:                  #000000; // Dark background color for the hero section
+$white-color:                 #ffffff; // White color for text in the hero section
+$secondary-color:             #DDA15E; // Secondary color used for small text
+
+// Mixin for hero section styling
+// This mixin standardizes the background color, positioning, and size for the hero section
+@mixin hero-section-style($bg-color, $min-height, $text-align) {
+  background-color: $bg-color;
+  position: relative;
+  overflow: hidden;
+  min-height: $min-height;
+  text-align: $text-align;
+}
+
+// Hero section styles
+.hero-section {
+  @include hero-section-style($dark-color, 620px, center); // Apply styles to hero section
+
+  // Styles for pseudo-element ::after to create an overlay effect
+  &::after {
+    background-color: rgba(0, 0, 0, 0.65); // Semi-transparent dark overlay
+    border-radius: $border-radius-medium; // Rounded corners for the overlay
+    content: ""; // Empty content to create the overlay
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-55%, -50%) rotate(45deg); // Center and rotate overlay
+    width: 250px;
+    height: 350px;
+    pointer-events: none; // Ensure the overlay does not block interactions
+  }
+}
+
+// Media query for responsive design
+// When the screen width is at least 991px, set hero section height to full viewport height
+@media screen and (min-width: 991px) {
+  .hero-section {
+    height: 100vh; // Full viewport height
+  }
+}
+
+// Heading styles within hero section
+.hero-section h1 {
+  color: $white-color; // White color for heading text
+}
+
+// Small text styles
+.small-text {
+  color: $secondary-color; // Secondary color for small text
+}
+
+// Custom border button styles within hero section
+.hero-section .custom-border-btn {
+  border-color: transparent; // No border color for custom buttons
+}
+
+// Container styles within hero section
+.hero-section .container {
+  position: relative; // Ensure container is above the overlay
+  z-index: 9; // Higher z-index than the overlay
+}
+
+// Hero slides styles
+.hero-slides {
+  width: 100%; // Full width
+  height: 100%; // Full height
+  position: absolute !important; // Ensures slides stay positioned correctly
+}
+
+// Opening hours list styles
+.opening-hours-list {
+  margin: 0; // No margin
+  padding: 0; // No padding
+}
+
+// Opening hours list items
+.opening-hours-list li {
+  color: rgba(255, 255, 255, 0.75); // Light color for list items
+  font-size: $btn-font-size; // Font size for list items
+  font-weight: $font-weight-normal; // Normal font weight for list items
+  margin-bottom: 10px; // Space below each list item
+}
+
+// Underline element within list items
+.opening-hours-list li .underline {
+  background-color: rgba(255, 255, 255, 0.75); // Light color for underline
+  width: 35%; // Width of the underline
+  height: 1px; // Thin underline
+  margin: auto 15px 0 15px; // Center the underline horizontally with margins
+}
+
+
+
+
+// Define additional color and border-radius variables
+$secondary-color:             #DDA15E; // Color for secondary backgrounds
+$border-radius-medium:        20px; // Medium border-radius for rounded corners
+
+// About section styles
+.about-section {
+  background-color: $secondary-color; // Set background color
+  position: relative; // Allows for positioning of child elements
+}
+
+// Ratio element in the about section with rounded corners
+.about-section .ratio {
+  border-radius: $border-radius-medium; // Round corners
+}
+
+// Custom video element with full width, height, and cover fit
+.custom-video {
+  border-radius: $border-radius-medium; // Round corners
+  width: 100%; // Full width
+  height: 100%; // Full height
+  object-fit: cover; // Cover the container while maintaining aspect ratio
+}
+
+// Wrapper for about section images with rounded corners and hidden overflow
+.about-image-wrap {
+  border-radius: $border-radius-medium; // Round corners
+  position: relative; // Positions child elements relative to this container
+  overflow: hidden; // Hide any overflow content (e.g., parts of images)
+}
+
+// Information overlay for video with a gradient background
+.about-video-info {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(188, 108, 37, 1)); // Gradient from black to secondary color
+  border-radius: $border-radius-medium; // Round corners
+  bottom: 0; // Align to the bottom
+  height: auto; // Height adjusts based on content
+  padding: 40px; // Add padding inside the container
+}
+
+// Heading inside the video info section with white text color
+.about-video-info h4 {
+  color: $white-color; // White color for text
+}
+
+// Color for h6 elements in the about section
+.about-section h6 {
+  color: $secondary-color; // Secondary color for text
+}
+
+// Team block styles with background color and rounded corners
+.team-block-wrap {
+  background-color: $secondary-color; // Background color
+  border-radius: $border-radius-medium; // Round corners
+  position: relative; // Allows for positioning of child elements
+  overflow: hidden; // Hide overflow content
+  max-height: 450px; // Limit maximum height
+  cursor: pointer; // Change cursor to pointer for clickable area
+}
+
+// Scale up image on hover for visual effect
+.team-block-wrap:hover .team-block-image {
+  transform: scale(1.2); // Scale up the image on hover
+}
+
+// Wrapper for team block images with full width
+.team-block-image-wrap {
+  width: 100%; // Full width
+}
+
+// Team block image styles with cover fit and smooth transition
+.team-block-image {
+  display: block; // Block level element
+  object-fit: cover; // Cover the container while maintaining aspect ratio
+  width: 100%; // Full width
+  height: 100%; // Full height
+  transition: all 0.3s; // Smooth transition effect for hover
+}
+
+// Team block info with gradient background and absolute positioning
+.team-block-info {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(188, 108, 37, 1)); // Gradient background
+  position: absolute; // Positioned absolutely within the parent container
+  z-index: 2; // Higher z-index to appear above other content
+  top: 0; // Align to the top
+  right: 0; // Align to the right
+  bottom: 0; // Align to the bottom
+  left: 0; // Align to the left
+  padding: 30px; // Padding inside the container
+}
+
+// Badge inside the team block info, centered vertically
+.team-block-info .badge {
+  margin: auto; // Center the badge horizontally
+  top: 2px; // Slight offset from the top
+  bottom: 0; // Align to the bottom
+}
+
+
+
+
+// Define additional color and size variables
+$border-radius-medium:        20px; // Medium border radius used for rounded corners
+$primary-color:               #BC6C25; // Primary color used for badges
+$white-color:                 #ffffff; // Color used for text and elements on dark backgrounds
+
+// Menu section background styles
+.menu-section {
+  background-image: url('../images/happy-waitress-giving-coffee-customers-while-serving-them-coffee-shop.jpg'); // Sets the background image
+  background-repeat: no-repeat; // Ensures the background image doesn’t repeat
+  background-size: cover; // Scales the background image to cover the entire element
+}
+
+// Menu block wrapper styles
+.menu-block-wrap {
+  background: rgba(0, 0, 0, 0.65); // Dark semi-transparent background
+  border-radius: $border-radius-medium; // Rounded corners
+  padding: 45px; // Adds padding inside the block
+}
+
+// Menu block styles
+.menu-block {
+  .border-top {
+    border-top-color: rgba(255, 255, 255, 0.35) !important; // Light border on top with high priority
+  }
+
+  h6 {
+    color: $white-color; // Sets heading color to white for better contrast
+  }
+
+  small {
+    color: rgba(255, 255, 255, 0.35); // Light color for smaller text, making it less prominent
+  }
+
+  strong {
+    color: $secondary-color; // Highlights strong text with a secondary color
+  }
+}
+
+// Menu block image styles
+.menu-block-image {
+  border-radius: 100%; // Makes the image round
+  width: 350px; // Sets fixed width
+  height: 350px; // Sets fixed height
+  object-fit: cover; // Ensures the image covers the entire area without distortion
+  display: block; // Makes the image a block element (for margin auto)
+  margin: auto; // Centers the image horizontally
+  cursor: pointer; // Shows a pointer cursor on hover indicating it's clickable
+}
+
+// Badge styles
+.badge {
+  background-color: $primary-color; // Sets the badge background color
+  font-size: 12px; // Small font size for the badge text
+  position: relative; // Allows positioning of the pseudo-element
+  bottom: 4px; // Moves the badge slightly up from the bottom
+  padding-bottom: 6px; // Adds space below the text inside the badge
+}
+
+// Badge arrow styles
+.badge::before {
+  content: ""; // Creates an empty pseudo-element
+  position: absolute; // Positions the pseudo-element absolutely within the badge
+  top: 0; // Aligns the top of the pseudo-element with the top of the badge
+  bottom: 0; // Aligns the bottom of the pseudo-element with the bottom of the badge
+  left: -5px; // Moves the arrow left outside the badge
+  border-top: 10px solid transparent; // Creates a transparent top border to make the arrow shape
+  border-bottom: 10px solid transparent; // Creates a transparent bottom border to complete the arrow shape
+  border-right: 10px solid $primary-color; // Creates a colored right border to form the arrow
+}
+
+
+
+
+// Define additional color variables
+$reviews-bg-color:             #7c5c52; // Background color for reviews section
+$border-top-color:            rgba(255, 255, 255, 0.35); // Color for the top border with transparency
+
+// Reviews section background
+.reviews-section {
+  background-color: $reviews-bg-color; // Sets the background color for the reviews section
+}
+
+// Reviews block styles
+.reviews-block {
+  background-color: $section-bg-color; // Background color of the block
+  border-radius: $border-radius-medium; // Rounds the corners of the block
+  position: relative; // Makes the block a positioning context for its children
+  overflow: hidden; // Hides any overflowing content (like rounded corners)
+}
+
+// Border at the top of the reviews block
+.reviews-block .border-top {
+  border-top-color: $border-top-color !important; // Sets a semi-transparent white border at the top
+}
+
+// Image wrapper inside the reviews block
+.reviews-block-image-wrap {
+  background-image: url('../images/mid-section-waitress-wiping-espresso-machine-with-napkin-cafa-c.jpg'); // Sets background image
+  background-repeat: no-repeat; // Prevents the image from repeating
+  background-size: cover; // Ensures the image covers the entire area
+  background-position: center; // Centers the image in the container
+  padding: 30px; // Adds padding inside the image wrapper
+}
+
+// Image inside the reviews block
+.reviews-block-image {
+  border-radius: $border-radius-large; // Rounds the corners of the image
+  width: 65px; // Sets a fixed width for the image
+  height: 65px; // Sets a fixed height for the image
+  object-fit: cover; // Ensures the image covers the area without distortion
+  margin-right: 10px; // Adds space to the right of the image
+}
+
+// Information block inside the reviews block
+.reviews-block-info {
+  padding: 20px 30px; // Adds padding inside the info block
+}
+
+// Paragraphs inside the reviews info block
+.reviews-block-info p {
+  font-size: $btn-font-size; // Sets the font size for paragraphs
+  font-style: italic; // Makes the text italic
+  color: rgba(255, 255, 255, 0.75); // Sets a semi-transparent white color for text
+}
+
+// Icons inside the reviews group
+.reviews-group i {
+  color: $white-color; // Sets the color of icons to white
+}
+
+
+
+
+// Define additional color and size variables
+$white-color:                 #ffffff; // White color used for text in overlays
+$secondary-color:             #DDA15E; // Secondary color for buttons
+$border-radius-medium:        20px; // Medium border radius for rounded corners
+
+// Mixin for background styling
+// This mixin handles setting a background image, its size, and position
+@mixin background-image($image-url) {
+  background-image: url($image-url);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+// Booking section styles
+.booking-section {
+  @include background-image('../images/young-female-barista-wear-face-mask-serving-take-away-hot-coffee-paper-cup-consumer-cafe.jpg');
+  position: relative; // Allows absolute positioning of child elements
+}
+
+// Booking form wrapper styles
+.booking-form-wrap {
+  background-color: rgba(0, 0, 0, 0.65); // Semi-transparent black background
+  border-radius: $border-radius-medium; // Rounded corners for a smooth look
+  position: relative; // Keeps the form wrapper in place
+  overflow: hidden; // Ensures children don't overflow out of the wrapper
+  margin-top: 100px; // Space above the form
+}
+
+// Booking form styles
+.booking-form {
+  padding: 55px 65px; // Padding inside the form to space content
+}
+
+// Booking form image wrapper styles
+.booking-form-image-wrap {
+  position: relative; // Allows for positioning the image inside
+  height: 100%; // Takes full height of the parent
+}
+
+// Booking form image styles
+.booking-form-image {
+  width: 100%; // Full width of the container
+  height: 100%; // Full height of the container
+  object-fit: cover; // Ensures the image covers the container without distortion
+}
+
+// Booking form text styles
+.booking-form-text span {
+  color: $white-color; // White text color for contrast on dark backgrounds
+  font-size: var(--btn-font-size); // Font size for readability
+}
+
+// Reservation page button styles
+.reservation-page {
+  .custom-border-btn {
+    border-color: $secondary-color; // Button border color
+    color: $secondary-color; // Button text color
+
+    &:hover {
+      border-color: transparent; // Border disappears on hover for a cleaner look
+    }
+  }
+}
+
+
+
+
+// Define additional color and radius variables
+$primary-color:               #BC6C25; // Primary color for backgrounds and icons
+$secondary-color:             #DDA15E; // Secondary color for blocks
+$white-color:                 #ffffff; // Color for text in contact blocks
+$border-radius-medium:        20px; // Medium border radius for rounded corners
+$border-radius-large:         100px; // Large border radius for icons
+
+// Contact section styles
+.contact-section {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.45), // Dark overlay to give a dim effect
+    rgba(188, 108, 37, 1) // Primary color for the gradient
+  ), url('../images/young-female-barista-wear-face-mask-serving-take-away-hot-coffee-paper-cup-consumer-cafe.jpg'); // Background image
+  background-repeat: no-repeat; // Prevent the image from repeating
+  background-position: center; // Center the image
+  background-size: cover; // Cover the entire section with the image
+}
+
+// Google Map styles
+.google-map {
+  border-radius: $border-radius-medium; // Medium radius for rounded corners
+  filter: grayscale(100); // Apply grayscale filter to the map
+}
+
+// Contact block wrapper styles
+.contact-block-wrap {
+  background: $primary-color; // Use primary color for the background
+  border-radius: $border-radius-medium; // Medium border radius for rounded corners
+  padding: 0; // No padding to maintain alignment
+  min-height: 200px; // Ensure minimum height for proper display
+}
+
+// Contact block styles
+.contact-block {
+  background: $secondary-color; // Use secondary color for the block
+  border-radius: $border-radius-medium; // Medium border radius for rounded corners
+  transform: rotate(8deg); // Rotate block for a dynamic effect
+  height: 100%; // Make block occupy full height of the container
+  padding: 20px 40px; // Add padding for content spacing
+}
+
+// Rotate the heading in the contact block to counteract the block rotation
+.contact-block h6 {
+  transform: rotate(-8deg); // Rotate heading back to counteract block rotation
+}
+
+// Custom icon styles inside contact block
+.contact-block .custom-icon {
+  background: $primary-color; // Use primary color for the icon background
+  border-radius: $border-radius-large; // Large radius for a rounded icon
+  display: block; // Display as block element
+  width: 50px; // Fixed width for the icon
+  height: 50px; // Fixed height for the icon
+  line-height: 50px; // Center text vertically
+  text-align: center; // Center text horizontally
+  position: relative; // Allow positioning relative to this element
+}
+
+// Strong text styles in contact block
+.contact-block strong {
+  display: block; // Display strong text as a block element
+  color: $white-color; // White color for strong text
+  text-transform: uppercase; // Transform text to uppercase for emphasis
+  margin-top: 20px; // Margin at the top to separate from other content
+  margin-bottom: 10px; // Margin at the bottom for spacing
+}
+
+
+
+
+// Define additional variables for form styling
+$form-control-bg-color:       transparent; // Default background for form controls
+$form-control-border-color:   rgba(255, 255, 255, 0.25); // Default border color for form controls
+$form-control-placeholder-color: #ffffff; // Color for placeholder text
+
+// Mixin for form control styles
+// This mixin applies consistent styling to form controls
+@mixin form-control-style($bg-color, $border-color, $text-color) {
+  background-color: $bg-color;
+  border-color: $border-color;
+  color: $text-color;
+}
+
+// Custom form control styles
+.custom-form {
+  .form-control {
+    color: $p-color; // Text color for form controls
+    border-radius: $border-radius-small; // Small border radius for rounded corners
+    margin-bottom: 30px; // Spacing between form controls
+    padding-top: 13px; // Padding at the top of the control
+    padding-bottom: 13px; // Padding at the bottom of the control
+    box-shadow: none; // No shadow for form controls
+    outline: none; // Remove default focus outline
+    transition: all 0.3s; // Smooth transition for hover and focus states
+    
+    &:hover,
+    &:focus {
+      background: $primary-color; // Change background color on hover/focus
+      border-color: transparent; // Remove border on hover/focus
+    }
+  }
+
+  .form-label {
+    color: $white-color; // Text color for labels
+    font-style: italic; // Italicize label text
+    margin-bottom: 15px; // Spacing below labels
+  }
+
+  button[type="submit"] {
+    background: $custom-btn-bg-color; // Background color for submit button
+    border: none; // Remove border from submit button
+    border-radius: $border-radius-large; // Large border radius for rounded button
+    color: $white-color; // Text color for submit button
+    font-size: $form-btn-font-size; // Font size for submit button text
+    font-weight: $font-weight-bold; // Bold font weight for submit button
+    transition: all 0.3s; // Smooth transition for hover/focus states
+    margin-bottom: 0; // Remove bottom margin
+    
+    &:hover,
+    &:focus {
+      background: $white-color; // Change background color on hover/focus
+      border-color: transparent; // Remove border on hover/focus
+      color: $primary-color; // Change text color on hover/focus
+    }
+  }
+}
+
+// Contact and booking form styles
+.contact-form {
+  .form-control {
+    @include form-control-style($form-control-bg-color, $form-control-border-color, $white-color); // Apply styles for contact form controls
+  }
+}
+
+.booking-form {
+  .form-control {
+    @include form-control-style($form-control-bg-color, $form-control-border-color, $white-color); // Apply styles for booking form controls
+    color: $white-color; // Change text color specifically for booking form controls
+  }
+}
+
+// Placeholder text color for different browsers
+.custom-form input::-webkit-input-placeholder,
+.custom-form textarea::-webkit-input-placeholder {
+  color: $form-control-placeholder-color; // Placeholder text color for WebKit browsers
+}
+
+.booking-form input:-moz-placeholder,
+.booking-form textarea:-moz-placeholder {
+  color: $form-control-placeholder-color; // Placeholder text color for Mozilla browsers
+}
+
+
+
+
+// Define additional color variables for the footer
+$footer-bg-color:             #BC6C25; // Background color for the site footer
+$footer-text-color:           rgba(255, 255, 255, 0.75); // Light color for text in the footer
+$footer-link-hover-color:     rgba(255, 255, 255, 0.75); // Link color on hover in the footer
+$footer-link-color:           rgba(255, 255, 255, 0.75); // Default link color in the footer
+$footer-copyright-link-color: rgba(255, 200, 160, 0.75); // Color for links in the copyright text
+
+// Mixin for footer padding
+// This mixin adds consistent padding to the top and bottom of the footer
+@mixin footer-padding($top, $bottom) {
+  padding-top: $top;
+  padding-bottom: $bottom;
+}
+
+// Site footer styles
+.site-footer {
+  background-color: $footer-bg-color; // Set background color for the footer
+  @include footer-padding(100px, 100px); // Apply 100px padding on top and bottom
+}
+
+// Style for strong elements inside the footer
+.site-footer strong {
+  color: $white-color; // White color for strong text to stand out
+}
+
+// Style for paragraphs and links in the footer
+.site-footer p,
+.site-footer-link {
+  color: $footer-text-color; // Light color for text and links
+  font-size: $btn-font-size; // Font size for footer text and links
+}
+
+// Style for footer links
+.site-footer-link {
+  color: $footer-link-color; // Default color for links
+  transition: all 0.3s; // Smooth transition for color change on hover
+}
+
+// Hover effect for footer links
+.site-footer-link:hover {
+  color: $footer-link-hover-color; // Change color on hover
+  text-decoration: underline; // Underline text on hover
+}
+
+// Copyright text styles
+.copyright-text {
+  color: $footer-text-color; // Light color for copyright text
+  font-size: $menu-font-size; // Font size for copyright text
+}
+
+// Style for links inside the copyright text
+.copyright-text a {
+  color: $footer-copyright-link-color; // Special color for links in the copyright text
+}
+
+
+
+
+// Define color and radius variables
+$primary-color:               #BC6C25; // Main color for social icons
+$white-color:                 #ffffff; // Color for icon background on hover
+$border-radius-large:         100px; // Large border radius for rounded icons
+
+// Mixin for social icon link styling
+// This mixin applies common styles to social icons
+@mixin social-icon-link-style {
+  background: $primary-color; // Set the background to the primary color
+  border-radius: $border-radius-large; // Use a large border radius for rounded corners
+  color: $white-color; // Set the text color to white
+  font-size: $menu-font-size; // Set font size for readability
+  display: block; // Make it a block element for spacing and alignment
+  margin: 0 5px; // Add horizontal margin to space out icons
+  text-align: center; // Center the text inside the icon
+  width: 35px; // Set width for a consistent icon size
+  height: 35px; // Set height to match the width, making it a square
+  line-height: 35px; // Center text vertically
+  transition: background 0.2s, color 0.2s; // Smooth transition for background and text color changes
+}
+
+// Social icon container styles
+.social-icon {
+  margin: 0; // Remove default margin
+  padding: 0; // Remove default padding
+}
+
+// Social icon item styles
+.social-icon-item {
+  list-style: none; // Remove bullet points from list items
+  display: inline-block; // Display items side by side
+  vertical-align: top; // Align items to the top of the line
+}
+
+// Social icon link styles
+.social-icon-link {
+  @include social-icon-link-style; // Apply common icon link styles
+}
+
+// Social icon link hover effect
+.social-icon-link:hover {
+  background: $white-color; // Change background to white on hover
+  color: $primary-color; // Change text color to primary color on hover
+}
+
+// Span inside social icon link
+.social-icon-link span {
+  display: block; // Ensure span takes up the whole block, aligning text properly
+}
+
+
+
+
+// Media Queries for Responsive Design
+
+// For screens up to 1200px wide
+@media screen and (max-width: 1200px) {
+    h1 {
+      font-size: 62px; // Reduce the font size of h1 for better fit on smaller screens
+    }
+  }
+  
+  // For screens up to 991px wide
+  @media screen and (max-width: 991px) {
+    h1 {
+      font-size: 54px; // Further reduce h1 font size for medium screens
+    }
+  
+    h2 {
+      font-size: 36px; // Adjust h2 font size
+    }
+  
+    h3 {
+      font-size: 32px; // Adjust h3 font size
+    }
+  
+    h4 {
+      font-size: 28px; // Adjust h4 font size
+    }
+  
+    h5 {
+      font-size: 20px; // Adjust h5 font size
+    }
+  
+    h6 {
+      font-size: 18px; // Adjust h6 font size
+    }
+  
+    .section-padding {
+      @include section-padding(50px, 50px); // Reduce padding for sections on smaller screens
+    }
+  
+    .hero-section {
+      @include section-padding(148px, 100px); // Adjust hero section padding for medium screens
+    }
+  
+    .navbar-brand,
+    .navbar-brand:hover {
+      font-size: $h5-font-size; // Use a smaller font size for the navbar brand
+    }
+  
+    .navbar-expand-lg .navbar-nav {
+      padding-bottom: 20px; // Reduce bottom padding for navbar items
+    }
+  
+    .navbar-expand-lg .navbar-nav .nav-link {
+      padding: 0; // Remove extra padding from nav links
+      margin-bottom: 0; // Remove bottom margin
+    }
+  
+    .navbar .custom-btn {
+      margin-bottom: 10px; // Add margin below custom buttons
+    }
+  
+    .booking-form {
+      padding: 45px; // Reduce padding for booking forms
+    }
+  
+    .contact-section .container {
+      width: auto; // Adjust container width
+      margin-right: 10px; // Add margin on the right
+      margin-left: 10px; // Add margin on the left
+      padding: 35px; // Adjust padding for contact section
+    }
+  
+    .site-footer {
+      @include section-padding(50px, 50px); // Adjust footer padding for better fit
+    }
+  }
+  
+  // For screens up to 767px wide
+  @media screen and (max-width: 767px) {
+    .custom-btn {
+      font-size: 14px; // Make custom buttons smaller
+      padding: 12px 20px; // Adjust padding inside buttons
+    }
+  
+    .menu-block-wrap,
+    .reviews-block-image-wrap,
+    .reviews-block-info {
+      padding: 20px; // Adjust padding for blocks in the menu and reviews sections
+    }
+  }
+  
+  // For screens up to 578px wide
+  @media screen and (max-width: 578px) {
+    .navbar .container,
+    .sticky-wrapper.is-sticky .container {
+      margin-right: 10px; // Add margin on the right
+      margin-left: 10px; // Add margin on the left
+    }
+  }
+  
+  // For screens up to 480px wide
+  @media screen and (max-width: 480px) {
+    h1 {
+      font-size: 38px; // Reduce h1 font size for very small screens
+    }
+  
+    h2 {
+      font-size: 28px; // Adjust h2 font size
+    }
+  
+    h3 {
+      font-size: 26px; // Adjust h3 font size
+    }
+  
+    h4 {
+      font-size: 22px; // Adjust h4 font size
+    }
+  
+    h5 {
+      font-size: 20px; // Adjust h5 font size
+    }
+  
+    .hero-section::after {
+      width: 200px; // Adjust size of the pseudo-element for hero section
+      height: 200px;
+    }
+  
+    .booking-form {
+      padding: 35px; // Further reduce padding for booking forms
+    }
+  
+    .opening-hours-list li {
+      font-size: 12px; // Make font size smaller for list items in opening hours
+    }
+  
+    .reviews-block-image-wrap {
+      flex-direction: column; // Stack images vertically for smaller screens
+    }
+  
+    .reviews-block-image {
+      margin-bottom: 15px; // Add margin below review images
+    }
+  
+    .timeline-container {
+      padding-left: 55px; // Add left padding for timeline container
+    }
+  
+    .timeline-container::before {
+      left: 44px; // Adjust position of the pseudo-element
+      border: medium solid white;
+      border-width: 15px 15px 15px 0;
+      border-color: transparent white transparent transparent; // Create a white triangle
+    }
+  
+    .timeline-container-left::before,
+    .timeline-container-right::before {
+      top: 13px; // Adjust top position for left and right pseudo-elements
+    }
+  }
+  
